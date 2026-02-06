@@ -1,4 +1,69 @@
 (async () => {
+
+  /* =========================================================
+     THEME (dark/light)
+     - html[data-theme]="dark|light" 로 CSS 토큰 스위칭
+     - localStorage("theme") 저장
+     ========================================================= */
+  const THEME_KEY = "theme";
+
+  function getSystemTheme(){
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ? "dark"
+      : "light";
+  }
+
+  function normalizeTheme(t){
+    return (t === "dark" || t === "light") ? t : null;
+  }
+
+  function readStoredTheme(){
+    try{
+      return normalizeTheme(localStorage.getItem(THEME_KEY));
+    }catch(e){
+      return null;
+    }
+  }
+
+  function writeStoredTheme(t){
+    try{
+      localStorage.setItem(THEME_KEY, t);
+    }catch(e){}
+  }
+
+  function applyTheme(t){
+    const theme = normalizeTheme(t) || getSystemTheme();
+    const root = document.documentElement;
+
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+
+    // 버튼 상태 동기화 (header partial이 들어온 뒤에도 호출될 수 있음)
+    const btn = document.getElementById("themeToggle");
+    if(btn){
+      btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      btn.title = theme === "dark" ? "라이트 모드" : "다크 모드";
+    }
+  }
+
+  function initThemeEarly(){
+    // 저장값 우선, 없으면 OS 테마
+    const stored = readStoredTheme();
+    applyTheme(stored || getSystemTheme());
+  }
+
+  function initThemeToggle(){
+    const btn = document.getElementById("themeToggle");
+    if(!btn) return;
+
+    btn.addEventListener("click", () => {
+      const cur = document.documentElement.dataset.theme || getSystemTheme();
+      const next = (cur === "light") ? "dark" : "light";
+      writeStoredTheme(next);
+      applyTheme(next);
+    });
+  }
+
   async function includePartials(){
     const nodes = document.querySelectorAll("[data-include]");
     await Promise.all([...nodes].map(async (el) => {
@@ -162,8 +227,19 @@
     });
   }
 
-  // ✅ 실행 순서: include로 DOM 들어온 다음 초기화해야 함
+  /* =========================================================
+     ✅ 실행 순서
+     1) 테마 먼저 적용 (partial include 전)
+     2) includePartials로 header/footer DOM 삽입
+     3) 토글 버튼 이벤트 바인딩 (include 이후)
+     ========================================================= */
+  initThemeEarly();
+
   await includePartials();
+
+  initThemeToggle();
+  applyTheme(document.documentElement.dataset.theme); // 버튼 aria/title 동기화
+
   setActiveLinks();
   initHeaderScroll();
   initDrawer();
