@@ -72,7 +72,7 @@
 }
 .grid2{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap:18px;
 }
 
@@ -165,3 +165,4 @@
   .grid2{ grid-template-columns: 1fr; }
   .partners{ grid-template-columns: repeat(2, 1fr); }
 }
+
