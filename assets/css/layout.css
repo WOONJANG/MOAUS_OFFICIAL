@@ -215,6 +215,12 @@ html[data-theme="light"] .themeIcon--moon{ display:none; }
   letter-spacing:.4px;
 }
 
+/* Drawer(aside)에서 현재 페이지 링크 숨김 */
+.drawer a.is-current,
+#drawer a.is-current{
+  display:none;
+}
+
 /* responsive */
 @media (max-width: 920px){
   .header__inner{ grid-template-columns: auto 1fr auto; }
@@ -269,3 +275,4 @@ footer{
   #openDrawer .iconImg{ transition:none; transform:none; }
   .drawer{ transition:none; }
 }
+
