@@ -115,24 +115,54 @@
     backdrop.addEventListener("click", closeDrawer);
   }
 
-  // ✅ 여기 추가
+  // ✅ Dev credit toggle (WOONIVERSE → build badge)
   function initDevCredit(){
     const el = document.getElementById("devCredit");
-    if (!el) return;
+    if(!el) return;
 
-    const defaultText = (el.dataset.default || el.textContent).trim();
+    const defaultText = ((el.dataset.default || el.textContent) || "").trim();
     const badgeText = (el.dataset.badge || "Build v1.0.0").trim();
 
+    let timer = null;
     let showingBadge = false;
-    el.style.cursor = "pointer";
 
-    el.addEventListener("click", () => {
-      showingBadge = !showingBadge;
-      el.textContent = showingBadge ? badgeText : defaultText;
+    function setText(next){
+      el.textContent = next;
+    }
+
+    function show(flag){
+      showingBadge = flag;
+      setText(showingBadge ? badgeText : defaultText);
+    }
+
+    function toggle(){
+      clearTimeout(timer);
+      show(!showingBadge);
+
+      // 과하지 않게 자동 원복 (원하면 제거 가능)
+      if(showingBadge){
+        timer = setTimeout(() => show(false), 1500);
+      }
+    }
+
+    el.style.cursor = "pointer";
+    el.addEventListener("click", toggle);
+
+    // 키보드 사용자 배려: Enter/Space 토글, ESC 원복
+    el.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggle();
+      }
+      if(e.key === "Escape"){
+        clearTimeout(timer);
+        show(false);
+        el.blur();
+      }
     });
   }
 
-  // ✅ 실행 순서: partial 로드 후에 devCredit 초기화
+  // ✅ 실행 순서: include로 DOM 들어온 다음 초기화해야 함
   await includePartials();
   setActiveLinks();
   initHeaderScroll();
