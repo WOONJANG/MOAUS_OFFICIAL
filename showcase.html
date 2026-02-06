@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>MOAUS | SHOWCASE</title>
+  <meta name="description" content="MOAUS PAGE" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MOAUS SHOWCASE" />
+  <meta property="og:description" content="marketing through sport" />
+  <meta property="og:image" content="assets/og.jpg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo:wght@700&family=Ubuntu:wght@700&family=Nanum+Gothic:wght@400&display=swap" rel="stylesheet">
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Common + Page CSS -->
+  <link rel="stylesheet" href="./assets/css/layout.css" />
+  <link rel="stylesheet" href="./assets/css/showcase.css" />
+
+  <!-- Common JS -->
+  <script src="./assets/js/layout.js" defer></script>
+</head>
+
+<body>
+  <!-- Header -->
+  <div data-include="partials/header.html"></div>
+
+  <!-- Mobile Drawer -->
+  <div data-include="partials/aside.html"></div>
+
+  <!-- banner Section -->
+  <section class="hero">
+    <div class="swiper" id="heroSwiper">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/vexx_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">V-EXX</div>
+            <h1 class="title">브이엑스</h1>
+            <p class="sub">배너1</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/yongin_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">용인 FC</div>
+            <h1 class="title">용인용인용인용인</h1>
+            <p class="sub">배너2</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/jkj_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">안양 정관장 레드부스터스</div>
+            <h2 class="title">레드부레드부레드부</h2>
+            <p class="sub">배너3</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/kbl_marvel_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">KBL X MARVEL</div>
+            <h2 class="title">마블마블마블</h2>
+            <p class="sub">배너4</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/kbo_marvel_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">KBO X 디즈니</div>
+            <h2 class="title">디즈니디즈니디즈니</h2>
+            <p class="sub">배너5</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/drbp_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">Dr. B-Pang</div>
+            <h2 class="title">닥터비팡</h2>
+            <p class="sub">배너6</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls -->
+      <div class="swiper-button-prev" aria-label="Previous"></div>
+      <div class="swiper-button-next" aria-label="Next"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- Dummy Sections -->
+  <section class="section" id="about">
+    <div class="section__inner">
+      <div class="card">
+        <h3>ABOUT</h3>
+        <p>V-EXX는 대한민국을 대표하는 순수 스포츠 의류 전문 브랜드로, 스포츠웨어의 혁신적인 디자인과 기능성에 집중하여 전문적인 맞춤형 유니폼과 고품질 트레이닝복을 제공하는 기업입니다.</p>
+      </div>
+      <div class="card">
+        <h3>ORGANIZATION</h3>
+        <p></p>
+      </div>
+      <div class="card">
+        <h3>PARTNERS</h3>
+        <p class="partnerRow">
+          <img src="assets/img/anayang_jkj_logo.png" alt="정관장레드부스터스" />
+          <img src="assets/img/fcanyang_logojpg.jpg" alt="FC안양" />
+          <img src="assets/img/jejuskfc_logo.png" alt="제주SKFC" />
+          <img src="assets/img/yonginfc_logo.jpg" alt="용인FC" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div data-include="partials/footer.html"></div>
+
+  <!-- Swiper + Page JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="./assets/js/showcase.js"></script>
+</body>
+</html>

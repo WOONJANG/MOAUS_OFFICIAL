@@ -1,0 +1,115 @@
+/* CONTACT 전용 스타일만. (헤더/드로어/푸터는 layout.css) */
+
+/* Hero */
+.pageHero{
+  height:52svh;
+  min-height:380px;
+  position:relative;
+  padding-top:var(--headerH);
+}
+.pageHero__bg{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.78)),
+    url("../img/contact-hero.jpg");
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.02);
+}
+.pageHero__content{
+  position:relative;
+  height:100%;
+  width:min(var(--max), 100%);
+  margin:0 auto;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.kicker{
+  font-family:"Ubuntu","Exo",sans-serif;
+  font-size:12px;
+  letter-spacing:2px;
+  opacity:.85;
+  margin-bottom:12px;
+}
+.heroTitle{
+  font-family:"Exo","Ubuntu",sans-serif;
+  font-size:44px;
+  letter-spacing:1px;
+  margin:0 0 10px;
+}
+.sub{
+  margin:0;
+  font-size:16px;
+  color:var(--muted);
+  line-height:1.8;
+  max-width:760px;
+  margin-inline:auto;
+}
+
+/* Section */
+.section{
+  padding:80px 0;
+  background:#000;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.section__inner{
+  width:min(var(--max), 100%);
+  margin:0 auto;
+  padding:0 16px;
+}
+
+/* Contact */
+.contactShell{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:18px;
+  align-items:start;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.contactCard{
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.02);
+  padding: 18px;
+}
+.contactCard h2{
+  margin: 0 0 10px;
+  font-family:"Ubuntu","Exo",sans-serif;
+  font-size:16px;
+  letter-spacing:.6px;
+  opacity:.92;
+}
+.contactCard p{
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.contactImageBox{
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.02);
+  padding: 14px;
+}
+.contactImageBox img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+.imgFallback{
+  display:none;
+  padding: 22px 16px;
+  border:1px dashed rgba(255,255,255,.18);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* Responsive */
+@media (max-width: 920px){
+  .heroTitle{ font-size:34px; }
+}

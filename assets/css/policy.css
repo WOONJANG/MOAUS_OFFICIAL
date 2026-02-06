@@ -1,0 +1,110 @@
+/* POLICY 전용 스타일만. (헤더/드로어/푸터/공통 변수는 layout.css) */
+
+/* Hero */
+.pageHero{
+  height:38svh;
+  min-height:280px;
+  position:relative;
+  padding-top:var(--headerH);
+}
+.pageHero__bg{
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.85));
+}
+.pageHero__content{
+  position:relative;
+  height:100%;
+  width:min(var(--max), 100%);
+  margin:0 auto;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.kicker{
+  font-family:"Ubuntu","Exo",sans-serif;
+  font-size:12px;
+  letter-spacing:2px;
+  opacity:.85;
+  margin-bottom:12px;
+}
+.heroTitle{
+  font-family:"Exo","Ubuntu",sans-serif;
+  font-size:40px;
+  letter-spacing:1px;
+  margin:0 0 10px;
+}
+.sub{
+  margin:0;
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.9;
+  max-width:760px;
+  margin-inline:auto;
+}
+
+/* Content layout */
+.section{
+  padding:70px 0;
+  background:#000;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.section__inner{
+  width:min(var(--max), 100%);
+  margin:0 auto;
+  padding:0 16px;
+}
+
+.paper{
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.02);
+  padding:22px;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+
+/* Header in paper */
+.termsHeader{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:18px;
+}
+.paper h2{
+  margin:0;
+  font-family:"Ubuntu","Exo",sans-serif;
+  font-size:16px;
+  letter-spacing:.6px;
+  opacity:.92;
+}
+.meta{
+  color:rgba(255,255,255,.55);
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* Article blocks */
+.article{
+  padding-top:18px;
+  margin-top:18px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.article:first-of-type{
+  border-top:0;
+  padding-top:0;
+  margin-top:0;
+}
+.article h3{
+  margin:0 0 10px;
+  font-family:"Ubuntu","Exo",sans-serif;
+  font-size:15px;
+  letter-spacing:.3px;
+  opacity:.95;
+}
+
+.paper p,
+.paper li{
+  color:var(--muted);
+  font-size:13px;
+  line-he

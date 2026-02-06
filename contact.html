@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>MOAUS | CONTACT</title>
+  <meta name="description" content="MOAUS CONTACT" />
+
+  <!-- Open Graph (옵션) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MOAUS | CONTACT" />
+  <meta property="og:description" content="marketing through sport" />
+  <meta property="og:image" content="assets/og.jpg" />
+
+  <!-- Fonts (공통) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo:wght@700&family=Ubuntu:wght@700&family=Nanum+Gothic:wght@400&display=swap" rel="stylesheet">
+
+  <!-- 공통 레이아웃 (헤더/드로어/푸터) -->
+  <link rel="stylesheet" href="./assets/css/layout.css" />
+  <!-- CONTACT 전용 -->
+  <link rel="stylesheet" href="./assets/css/contact.css" />
+
+  <!-- 공통 동작 -->
+  <script src="./assets/js/layout.js" defer></script>
+  <!-- CONTACT 전용 (이미지 fallback) -->
+  <script src="./assets/js/contact.js" defer></script>
+</head>
+
+<body>
+  <!-- 공통 Header -->
+  <div data-include="partials/header.html"></div>
+
+  <!-- 공통 Aside(드로어) -->
+  <div data-include="partials/aside.html"></div>
+
+  <!-- Hero -->
+  <section class="pageHero" id="top">
+    <div class="pageHero__bg" aria-hidden="true"></div>
+    <div class="pageHero__content">
+      <div>
+        <div class="kicker">MOAUS / V-EXX</div>
+        <h1 class="heroTitle">CONTACT</h1>
+        <p class="sub">문의는 아래 채널로 연락 주세요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="section__inner">
+      <div class="contactShell">
+        <div class="contactCard">
+          <h2>GET IN TOUCH</h2>
+          <p>...</p>
+
+          <div class="contactImageBox">
+            <img
+              id="contactImg"
+              src="assets/img/contact-card.png"
+              alt="MOAUS 연락처 정보 (이메일, 전화번호, 주소)"
+              loading="lazy"
+            />
+            <div class="imgFallback" id="imgFallback">
+              contact-card.png 이미지를 찾지 못했습니다.<br/>
+              assets/img/contact-card.png 경로를 확인하세요.
+            </div>
+          </div>
+
+          <!-- 검색/접근성용 텍스트 -->
+          <div class="srOnly">
+            이메일: vexx.sport@gmail.com
+            전화: 02-6212-7760
+            주소: 서울특별시 중랑구 신내역로 111 신내SKV1center A동 908호
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 공통 Footer -->
+  <div data-include="partials/footer.html"></div>
+</body>
+</html>
