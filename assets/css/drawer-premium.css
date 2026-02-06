@@ -1,0 +1,257 @@
+/* Premium Drawer (safe overrides) */
+
+:root{
+  --drawerW: 380px;
+  --drawerRadius: 22px;
+  --drawerStroke: rgba(255,255,255,.14);
+  --drawerStroke2: rgba(255,255,255,.22);
+  --drawerText: rgba(255,255,255,.92);
+  --drawerMuted: rgba(255,255,255,.62);
+  --drawerBg: rgba(12,14,18,.88);
+  --drawerBg2: rgba(12,14,18,.72);
+  --drawerShadow: 0 24px 80px rgba(0,0,0,.55);
+}
+
+/* overlay */
+.drawerOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.58);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease;
+  z-index: 9998;
+}
+
+/* drawer base */
+.drawer{
+  position: fixed;
+  top: 0; right: 0;
+  width: min(var(--drawerW), 92vw);
+  height: 100vh;
+  z-index: 9999;
+
+  /* IMPORTANT: prevent :root var collisions from other page css */
+  --panel: var(--drawerBg);
+
+  background: linear-gradient(180deg, var(--drawerBg), var(--drawerBg2));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-left: 1px solid var(--drawerStroke);
+  box-shadow: var(--drawerShadow);
+  transform: translateX(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .22s ease, opacity .22s ease;
+  outline: none;
+}
+
+/* open state (you can toggle this class from JS) */
+.drawer.is-open{
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawerOverlay.is-open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer__inner{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 18px;
+}
+
+/* header */
+.drawerHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 10px 6px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.drawerBrand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color: var(--drawerText);
+}
+
+.drawerBrand__mark{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display:grid;
+  place-items:center;
+  border: 1px solid var(--drawerStroke);
+  background: rgba(255,255,255,.06);
+  font-family: "Exo","Ubuntu",system-ui,sans-serif;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.drawerBrand__text{
+  font-family: "Exo","Ubuntu",system-ui,sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.drawerClose{
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: var(--drawerText);
+  cursor: pointer;
+  transition: transform .16s ease, background .16s ease, border-color .16s ease;
+}
+.drawerClose:hover{
+  transform: scale(1.03);
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.22);
+}
+
+/* nav groups */
+.drawerNav{
+  padding: 14px 4px 8px;
+  overflow: auto;
+  flex: 1;
+}
+
+.drawerGroup{
+  padding: 10px 6px 6px;
+}
+
+.drawerGroup + .drawerGroup{
+  margin-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 16px;
+}
+
+.drawerGroup__title{
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,.45);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+/* links */
+.drawerLink{
+  position: relative;
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: 12px;
+
+  padding: 12px 12px;
+  border-radius: 16px;
+
+  text-decoration:none;
+  color: var(--drawerText);
+  border: 1px solid transparent;
+  background: transparent;
+
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.drawerLink:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.10);
+  transform: translateY(-1px);
+}
+
+.drawerLink__label{
+  font-family: "Ubuntu","Exo",system-ui,sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .6px;
+}
+
+.drawerLink__meta{
+  font-size: 12px;
+  color: var(--drawerMuted);
+  white-space: nowrap;
+}
+
+/* active / current */
+.drawerLink.active{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.16);
+}
+
+.drawerLink.active::before{
+  content:"";
+  position:absolute;
+  left: 8px;
+  top: 50%;
+  width: 3px;
+  height: 18px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: rgba(255,255,255,.75);
+  opacity: .9;
+}
+
+/* hide current link option */
+.drawerLink.is-current{
+  display: none;
+}
+
+/* footer */
+.drawerFooter{
+  padding: 12px 6px 0;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.drawerCtas{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom: 10px;
+}
+
+.drawerBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.07);
+  color: var(--drawerText);
+  text-decoration:none;
+  font-size: 13px;
+}
+
+.drawerBtn:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.22);
+}
+
+.drawerBtn.ghost{
+  background: transparent;
+}
+
+.drawerFine{
+  font-size: 11px;
+  line-height: 1.6;
+  color: rgba(255,255,255,.55);
+}
+.drawerFine__muted{
+  color: rgba(255,255,255,.40);
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .drawer, .drawerOverlay, .drawerClose, .drawerLink{
+    transition: none !important;
+  }
+}
