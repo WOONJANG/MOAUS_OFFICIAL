@@ -47,7 +47,6 @@
   }
 
   function initThemeEarly(){
-    // 저장값 우선, 없으면 OS 테마
     const stored = readStoredTheme();
     applyTheme(stored || getSystemTheme());
   }
@@ -64,6 +63,9 @@
     });
   }
 
+  /* =========================================================
+     PARTIALS
+     ========================================================= */
   async function includePartials(){
     const nodes = document.querySelectorAll("[data-include]");
     await Promise.all([...nodes].map(async (el) => {
@@ -82,58 +84,181 @@
     }));
   }
 
-  function hideCurrentLinkInDrawer(){
-  const drawer = document.getElementById("drawer") || document.querySelector(".drawer");
-  if(!drawer) return;
-
-  // 1) 이미 active를 찍어두는 구조면 그걸 재활용 (가장 깔끔)
-  const active = drawer.querySelector("a.active");
-  if(active){
-    active.classList.add("is-current");
-    return;
+  /* =========================================================
+     UTIL
+     ========================================================= */
+  function getCurrentFile(){
+    return (location.pathname.split("/").pop() || "index.html").toLowerCase();
   }
 
-  // 2) fallback: 현재 파일명과 href 파일명 비교
-  const curFile = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-
-  drawer.querySelectorAll("a[href]").forEach(a => {
-    const href = (a.getAttribute("href") || "").trim();
-    if(!href) return;
-
-    // 외부/앵커/특수 링크는 제외
-    if(href.startsWith("#")) return;
-    if(/^https?:\/\//i.test(href)) return;
-    if(/^mailto:/i.test(href)) return;
-    if(/^tel:/i.test(href)) return;
-
-    const u = new URL(href, location.href);
-    const file = (u.pathname.split("/").pop() || "index.html").toLowerCase();
-
-    // 같은 파일 + 해시 없는 "페이지 링크"만 숨김
-    if(file === curFile && !u.hash){
-      a.classList.add("is-current");
+  function safeURL(href){
+    try{
+      return new URL(href, location.href);
+    }catch(_){
+      return null;
     }
-  });
-}
+  }
 
-  
+  function isExternalHref(href){
+    if(!href) return true;
+    const h = href.trim();
+    if(!h) return true;
+    if(h.startsWith("#")) return false;
+    if(/^https?:\/\//i.test(h)) return true;
+    if(/^mailto:/i.test(h)) return true;
+    if(/^tel:/i.test(h)) return true;
+    return false;
+  }
+
+  function getHeaderHeight(){
+    const header = document.getElementById("siteHeader");
+    if(!header) return 0;
+
+    // CSS 토큰(--headerH)이 px로 잡혀있으면 그걸 우선
+    const cssVal = getComputedStyle(document.documentElement).getPropertyValue("--headerH").trim();
+    if(cssVal.endsWith("px")){
+      const n = parseFloat(cssVal);
+      if(!Number.isNaN(n)) return n;
+    }
+    return header.getBoundingClientRect().height || 0;
+  }
+
+  /* =========================================================
+     SKIP LINK / MAIN ID (없으면 자동 생성)
+     ========================================================= */
+  function ensureMainAndSkipLink(){
+    const main = document.querySelector("main");
+    if(main && !main.id) main.id = "main";
+
+    // skip-link가 이미 있으면 건드리지 않음
+    if(document.querySelector(".skip-link")) return;
+
+    const a = document.createElement("a");
+    a.className = "skip-link";
+    a.href = "#main";
+    a.textContent = "본문으로 바로가기";
+
+    // body 맨 앞에 삽입
+    document.body.insertBefore(a, document.body.firstChild);
+
+    // 최소 스타일 주입(레이아웃 CSS에 이미 있으면 무시될 수 있음)
+    const id = "skip-link-style";
+    if(document.getElementById(id)) return;
+    const st = document.createElement("style");
+    st.id = id;
+    st.textContent = `
+      .skip-link{
+        position:absolute; left:-9999px; top:10px;
+        padding:10px 12px; border-radius:12px;
+        background: rgba(255,255,255,.10);
+        border:1px solid rgba(255,255,255,.18);
+        color: var(--fg, #fff);
+        z-index:2000;
+      }
+      .skip-link:focus{ left:12px; }
+    `;
+    document.head.appendChild(st);
+  }
+
+  /* =========================================================
+     ACTIVE LINKS (hash까지 정확히)
+     + aria-current 자동 처리
+     ========================================================= */
   function setActiveLinks(){
-    const cur = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+    const curFile = getCurrentFile();
+    const curHash = (location.hash || "").toLowerCase();
 
-    const mark = (selector) => {
+    const applyTo = (selector) => {
       document.querySelectorAll(selector).forEach(a => {
-        const href = (a.getAttribute("href") || "").toLowerCase();
-        if(!href || href.startsWith("http") || href.startsWith("#")) return;
+        const hrefRaw = (a.getAttribute("href") || "").trim();
+        a.classList.remove("active");
+        a.removeAttribute("aria-current");
 
-        const file = href.split("/").pop().split("#")[0].split("?")[0];
-        a.classList.toggle("active", file === cur);
+        if(!hrefRaw) return;
+
+        // 해시만(#shop)
+        if(hrefRaw.startsWith("#")){
+          const h = hrefRaw.toLowerCase();
+          const isActive = curHash && h === curHash;
+          if(isActive){
+            a.classList.add("active");
+            a.setAttribute("aria-current", "location");
+          }
+          return;
+        }
+
+        // 외부/특수 링크는 활성 처리 안 함
+        if(/^https?:\/\//i.test(hrefRaw)) return;
+        if(/^mailto:/i.test(hrefRaw)) return;
+        if(/^tel:/i.test(hrefRaw)) return;
+
+        const u = safeURL(hrefRaw);
+        if(!u) return;
+
+        const file = (u.pathname.split("/").pop() || "index.html").toLowerCase();
+        const hash = (u.hash || "").toLowerCase();
+
+        if(file !== curFile) return;
+
+        // 같은 파일이라도 hash가 있으면 hash까지 같을 때만 active
+        if(hash){
+          const isActive = !!curHash && (hash === curHash);
+          if(isActive){
+            a.classList.add("active");
+            a.setAttribute("aria-current", "location");
+          }
+          return;
+        }
+
+        // 순수 페이지 링크는 현재 hash가 없을 때만 active
+        if(!curHash){
+          a.classList.add("active");
+          a.setAttribute("aria-current", "page");
+        }
       });
     };
 
-    mark(".nav a");
-    mark(".drawer a");
+    applyTo(".nav a");
+    applyTo(".drawer a");
   }
 
+  /* =========================================================
+     Drawer(aside)에서 "현재 페이지(파일)" 링크 숨김
+     - 섹션 링크(index.html#shop)는 숨기지 않음
+     ========================================================= */
+  function hideCurrentLinkInDrawer(){
+    const drawer = document.getElementById("drawer") || document.querySelector(".drawer");
+    if(!drawer) return;
+
+    const curFile = getCurrentFile();
+
+    drawer.querySelectorAll("a[href]").forEach(a => {
+      a.classList.remove("is-current");
+
+      const href = (a.getAttribute("href") || "").trim();
+      if(!href) return;
+
+      if(href.startsWith("#")) return;
+      if(/^https?:\/\//i.test(href)) return;
+      if(/^mailto:/i.test(href)) return;
+      if(/^tel:/i.test(href)) return;
+
+      const u = safeURL(href);
+      if(!u) return;
+
+      const file = (u.pathname.split("/").pop() || "index.html").toLowerCase();
+      const hash = (u.hash || "");
+
+      // 같은 파일 + 해시 없는 "페이지 링크"만 숨김
+      if(file === curFile && !hash){
+        a.classList.add("is-current");
+      }
+    });
+  }
+
+  /* =========================================================
+     HEADER SCROLL (scrolled class)
+     ========================================================= */
   function initHeaderScroll(){
     const header = document.getElementById("siteHeader");
     if(!header) return;
@@ -143,6 +268,139 @@
     onScroll();
   }
 
+  /* =========================================================
+     HEADER PROGRESS BAR (자동 생성 + CSS 주입)
+     ========================================================= */
+  function ensureHeaderProgress(){
+    const header = document.getElementById("siteHeader");
+    if(!header) return;
+
+    // position이 없으면 absolute 배치가 깨지니 보정 (이미 fixed면 괜찮음)
+    const cs = getComputedStyle(header);
+    if(cs.position === "static"){
+      header.style.position = "relative";
+    }
+
+    // progress element 없으면 생성
+    if(!header.querySelector(".headerProgress")){
+      const bar = document.createElement("div");
+      bar.className = "headerProgress";
+      bar.setAttribute("aria-hidden", "true");
+      header.appendChild(bar);
+    }
+
+    // CSS 없으면 주입
+    const styleId = "header-progress-style";
+    if(!document.getElementById(styleId)){
+      const st = document.createElement("style");
+      st.id = styleId;
+      st.textContent = `
+        .headerProgress{
+          position:absolute;
+          left:0; right:0; bottom:0;
+          height:2px;
+          background: rgba(255,255,255,.08);
+          overflow:hidden;
+          pointer-events:none;
+        }
+        .headerProgress::before{
+          content:"";
+          display:block;
+          height:100%;
+          width: var(--scrollP, 0%);
+          background: rgba(255,255,255,.75);
+          transform: translateZ(0);
+        }
+        html[data-theme="light"] .headerProgress{
+          background: rgba(0,0,0,.08);
+        }
+        html[data-theme="light"] .headerProgress::before{
+          background: rgba(0,0,0,.65);
+        }
+      `;
+      document.head.appendChild(st);
+    }
+  }
+
+  function initScrollProgress(){
+    const doc = document.documentElement;
+
+    const update = () => {
+      const max = (doc.scrollHeight - doc.clientHeight) || 1;
+      const p = Math.min(100, Math.max(0, (window.scrollY / max) * 100));
+      doc.style.setProperty("--scrollP", p.toFixed(2) + "%");
+    };
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+  }
+
+  /* =========================================================
+     ANCHOR OFFSET (헤더에 가리지 않게)
+     - index.html#shop 같은 링크 클릭/새로고침 모두 보정
+     ========================================================= */
+  function scrollToHash(hash, behavior="smooth"){
+    const id = (hash || "").replace("#", "");
+    if(!id) return;
+
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    const top = window.scrollY + el.getBoundingClientRect().top - getHeaderHeight() - 12;
+    window.scrollTo({ top, behavior });
+  }
+
+  function initAnchorOffset(){
+    // 로드 시 hash 있으면 보정
+    window.addEventListener("load", () => {
+      if(location.hash){
+        // 첫 렌더 후 보정이 안정적
+        setTimeout(() => scrollToHash(location.hash, "auto"), 0);
+      }
+    });
+
+    // 클릭으로 hash 이동 시 보정
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest?.('a[href]');
+      if(!a) return;
+
+      const href = (a.getAttribute("href") || "").trim();
+      if(!href) return;
+
+      // 외부/특수 제외
+      if(/^https?:\/\//i.test(href)) return;
+      if(/^mailto:/i.test(href)) return;
+      if(/^tel:/i.test(href)) return;
+
+      const u = safeURL(href);
+      if(!u || !u.hash) return;
+
+      // 같은 페이지 내 hash 이동만 가로챔
+      if(u.pathname !== location.pathname) return;
+
+      e.preventDefault();
+      history.pushState(null, "", u.hash);
+      scrollToHash(u.hash, "smooth");
+
+      // active 갱신
+      setActiveLinks();
+      hideCurrentLinkInDrawer();
+    });
+
+    // 뒤로/앞으로 시 hash 보정
+    window.addEventListener("popstate", () => {
+      if(location.hash){
+        scrollToHash(location.hash, "auto");
+      }
+      setActiveLinks();
+      hideCurrentLinkInDrawer();
+    });
+  }
+
+  /* =========================================================
+     DRAWER (open/close + focus trap + ESC + link click close)
+     ========================================================= */
   function initDrawer(){
     const drawer = document.getElementById("drawer");
     const backdrop = document.getElementById("drawerBackdrop");
@@ -157,10 +415,14 @@
     let lastFocus = null;
     const focusable = 'button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
+    function getFocusable(){
+      return [...drawer.querySelectorAll(focusable)].filter(el => !el.hasAttribute("disabled"));
+    }
+
     function trapFocus(e){
       if(e.key !== "Tab") return;
 
-      const items = [...drawer.querySelectorAll(focusable)].filter(el => !el.hasAttribute("disabled"));
+      const items = getFocusable();
       if(items.length === 0) return;
 
       const first = items[0];
@@ -175,6 +437,10 @@
       }
     }
 
+    function onKeydown(e){
+      if(e.key === "Escape") closeDrawer();
+    }
+
     function closeDrawer(){
       drawer.classList.remove("open");
       backdrop.classList.remove("show");
@@ -187,10 +453,6 @@
       window.removeEventListener("keydown", onKeydown);
 
       if(lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
-    }
-
-    function onKeydown(e){
-      if(e.key === "Escape") closeDrawer();
     }
 
     function openDrawer(){
@@ -210,12 +472,76 @@
       window.addEventListener("keydown", onKeydown);
     }
 
+    // 링크 클릭 시 닫기(페이지 이동/섹션 이동 모두)
+    drawer.addEventListener("click", (e) => {
+      const a = e.target.closest?.("a[href]");
+      if(!a) return;
+      closeDrawer();
+    });
+
     openBtn.addEventListener("click", openDrawer);
     closeBtn.addEventListener("click", closeDrawer);
     backdrop.addEventListener("click", closeDrawer);
   }
 
-  // ✅ Dev credit toggle (WOONIVERSE → build badge)
+  /* =========================================================
+     EXTERNAL LINK SAFETY (target=_blank => rel noopener noreferrer)
+     ========================================================= */
+  function fixExternalBlankRel(){
+    document.querySelectorAll('a[target="_blank"]').forEach(a => {
+      const rel = (a.getAttribute("rel") || "").toLowerCase().split(/\s+/).filter(Boolean);
+      ["noopener", "noreferrer"].forEach(v => { if(!rel.includes(v)) rel.push(v); });
+      a.setAttribute("rel", rel.join(" "));
+    });
+  }
+
+  /* =========================================================
+     PREFETCH (hover 시 다음 문서 미리 받기)
+     - 과하면 트래픽 늘어남. 메뉴에만 자연스럽게 적용됨.
+     ========================================================= */
+  function initPrefetchOnHover(){
+    const seen = new Set();
+
+    function shouldPrefetch(href){
+      if(!href) return false;
+      if(href.startsWith("#")) return false;
+      if(/^https?:\/\//i.test(href)) return false;
+      if(/^mailto:/i.test(href) || /^tel:/i.test(href)) return false;
+      return true;
+    }
+
+    function prefetch(href){
+      const u = safeURL(href);
+      if(!u) return;
+
+      // 같은 문서만 대상으로(쿼리/해시 제거)
+      const key = u.pathname + u.search;
+      if(seen.has(key)) return;
+      seen.add(key);
+
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = u.href;
+      link.as = "document";
+      document.head.appendChild(link);
+    }
+
+    document.addEventListener("mouseover", (e) => {
+      const a = e.target.closest?.("a[href]");
+      if(!a) return;
+
+      // nav/drawer 위주로만
+      if(!a.closest(".nav") && !a.closest(".drawer")) return;
+
+      const href = (a.getAttribute("href") || "").trim();
+      if(!shouldPrefetch(href)) return;
+      prefetch(href);
+    });
+  }
+
+  /* =========================================================
+     DEV CREDIT TOGGLE (WOONIVERSE → build badge)
+     ========================================================= */
   function initDevCredit(){
     const el = document.getElementById("devCredit");
     if(!el) return;
@@ -239,7 +565,6 @@
       clearTimeout(timer);
       show(!showingBadge);
 
-      // 과하지 않게 자동 원복 (원하면 제거 가능)
       if(showingBadge){
         timer = setTimeout(() => show(false), 1500);
       }
@@ -248,7 +573,6 @@
     el.style.cursor = "pointer";
     el.addEventListener("click", toggle);
 
-    // 키보드 사용자 배려: Enter/Space 토글, ESC 원복
     el.addEventListener("keydown", (e) => {
       if(e.key === "Enter" || e.key === " "){
         e.preventDefault();
@@ -264,22 +588,30 @@
 
   /* =========================================================
      ✅ 실행 순서
-     1) 테마 먼저 적용 (partial include 전)
-     2) includePartials로 header/footer DOM 삽입
-     3) 토글 버튼 이벤트 바인딩 (include 이후)
      ========================================================= */
   initThemeEarly();
 
   await includePartials();
 
+  // partial 들어온 뒤
   initThemeToggle();
   applyTheme(document.documentElement.dataset.theme); // 버튼 aria/title 동기화
 
+  ensureMainAndSkipLink();
+
+  initHeaderScroll();
+  ensureHeaderProgress();
+  initScrollProgress();
+
+  initAnchorOffset();
+
   setActiveLinks();
   hideCurrentLinkInDrawer();
-  initHeaderScroll();
+
   initDrawer();
   initDevCredit();
+
+  fixExternalBlankRel();
+  initPrefetchOnHover();
+
 })();
-
-
