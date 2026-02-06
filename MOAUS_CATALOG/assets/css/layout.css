@@ -170,8 +170,15 @@ footer{
 .footer__links a{ opacity:.9; margin-right:12px; }
 .footer__links a:hover{ opacity:1; }
 .footer__copy{ margin-left:auto; }
+.credit-toggle:hover{ color:#ccc; }
 
+.credit-toggle:focus-visible{
+  outline:2px solid #999;
+  outline-offset:3px;
+  border-radius:6px;
+}
 @media (prefers-reduced-motion: reduce){
   #openDrawer .iconImg{ transition:none; transform:none; }
   .drawer{ transition:none; }
 }
+
