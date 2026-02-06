@@ -7,7 +7,7 @@ window.CLUBS = [
     url: "https://vexxsports.com/",
     tags: [
       { text: "Official", tone: "accent" },
-      { text: "Uniform", tone: "normal" }
+      { text: "Apparel", tone: "normal" },
     ]
   },
   {
@@ -17,7 +17,7 @@ window.CLUBS = [
     logo: "./assets/img/yongin_logo.png",
     url: "https://yonginfcstore.com/",
     tags: [
-      { text: "Store", tone: "accent" },
+      { text: "Football", tone: "accent" },
       { text: "MD", tone: "normal" }
     ]
   },
@@ -28,9 +28,9 @@ window.CLUBS = [
     logo: "./assets/img/jkj_logo.png",
     url: "https://redboostersstore.com/",
     tags: [
-      { text: "Kit Sponsor", tone: "accent" },
-      { text: "Store", tone: "normal" },
-      { text: "MD", tone: "normal" }
+      { text: "Basketball", tone: "accent" },
+      { text: "Uniform", tone: "normal" },
+      { text: "MD", tone: "normal" },
     ]
   },
   {
@@ -39,7 +39,10 @@ window.CLUBS = [
     image: "./assets/img/kbo_disney_bgimg.png",
     logo: "./assets/img/kbo_disney_logo.png",
     url: "http://moaus.shop/",
-    tags: [{ text: "MD", tone: "accent" }]
+    tags: [
+      { text: "Collaboration", tone: "accent" },
+      { text: "MD", tone: "normal" },
+    ]
   },
   {
     name: "KBL X MARVEL",
@@ -47,7 +50,10 @@ window.CLUBS = [
     image: "./assets/img/kbl_marvel_bgimg.png",
     logo: "./assets/img/kbl_marvel_logo.png",
     url: "http://moaus.shop/",
-    tags: [{ text: "MD", tone: "accent" }]
+    tags: [
+      { text: "Collaboration", tone: "accent" },
+      { text: "MD", tone: "normal" },
+    ]
   },
   {
     name: "Dr.B-Pang",
@@ -55,8 +61,12 @@ window.CLUBS = [
     image: "./assets/img/drbp_bgimg.png",
     logo: "./assets/img/drbp_logo.png",
     url: "http://moaus.shop/",
-    tags: [{ text: "MD", tone: "accent" }]
+    tags: [
+      { text: "Collaboration", tone: "accent" },
+      { text: "MD", tone: "normal" },
+    ]
   }
 ];
+
 
 
