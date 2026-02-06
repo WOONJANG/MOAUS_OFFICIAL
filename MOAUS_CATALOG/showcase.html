@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>MOAUS</title>
+  <meta name="description" content="MOAUS PAGE" />
+
+  <!-- Open Graph (옵션) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MOAUS" />
+  <meta property="og:description" content="marketing through sport" />
+  <meta property="og:image" content="assets/og.jpg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo:wght@700&family=Ubuntu:wght@700&family=Nanum+Gothic:wght@400&display=swap" rel="stylesheet">
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --fg:#ffffff;
+      --muted:rgba(255,255,255,.7);
+      --line:rgba(255,255,255,.12);
+      --headerH:72px;
+      --max:1200px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; font-family:"Nanum Gothic", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color:var(--fg); background:#000; }
+    a{ color:inherit; text-decoration:none; }
+    button{ font:inherit; }
+
+    /* Header */
+    .header{
+      position:fixed; left:0; top:0; right:0;
+      height:var(--headerH);
+      display:flex; align-items:center;
+      z-index:1000;
+      background:rgba(0,0,0,.15);
+      border-bottom:1px solid transparent;
+      transition: background .2s ease, border-color .2s ease, backdrop-filter .2s ease;
+      backdrop-filter:saturate(120%) blur(0px);
+    }
+    .header.scrolled{
+      background:rgba(0,0,0,.65);
+      border-color:var(--line);
+      backdrop-filter:saturate(120%) blur(10px);
+    }
+    .header__inner{
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:0 16px;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      gap:12px;
+    }
+    .nav{
+      display:flex; align-items:center; gap:18px;
+      font-family:"Ubuntu","Exo",sans-serif;
+      letter-spacing:.3px;
+      font-size:14px;
+    }
+    .nav a{ opacity:.9; }
+    .nav a:hover{ opacity:1; }
+
+    .logo{
+      display:flex; align-items:center; justify-content:center;
+      gap:10px;
+      font-family:"Exo","Ubuntu",sans-serif;
+      letter-spacing:.8px;
+    }
+    .logo img{ height:28px; width:auto; display:block; }
+
+    .actions{
+      display:flex; justify-content:flex-end; align-items:center; gap:10px;
+      font-size:13px;
+    }
+    .iconBtn{
+      height:36px; padding:0 10px;
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--fg);
+      border-radius:0;
+      cursor:pointer;
+      display:flex; align-items:center; gap:8px;
+      opacity:.92;
+    }
+    .iconBtn:hover{ opacity:1; border-color:rgba(255,255,255,.25); }
+    .hamburger{
+      width:44px; justify-content:center;
+    }
+
+    /* Hero */
+    .hero{
+      height:100svh; /* 모바일 주소창 이슈 완화 */
+      min-height:520px;
+      position:relative;
+    }
+    .swiper{ height:100%; }
+    .slide{
+      height:100%;
+      position:relative;
+    }
+    .slide__bg{
+      position:absolute; inset:0;
+      background-size:cover;
+      background-position:center;
+      transform:scale(1.02);
+    }
+    .slide__overlay{
+      position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.65));
+    }
+    .slide__content{
+      position:absolute;
+      left:0; right:0;
+      top:50%;
+      transform:translateY(-50%);
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:0 16px;
+      text-align:center;
+    }
+    .kicker{
+      font-family:"Ubuntu","Exo",sans-serif;
+      font-size:12px;
+      letter-spacing:2px;
+      opacity:.85;
+      margin-bottom:12px;
+    }
+    .title{
+      font-family:"Exo","Ubuntu",sans-serif;
+      font-size:44px;
+      letter-spacing:1px;
+      margin:0 0 10px;
+    }
+    .sub{
+      margin:0;
+      font-size:16px;
+      color:var(--muted);
+    }
+    .hero__hint{
+      position:absolute;
+      left:0; right:0;
+      bottom:18px;
+      text-align:center;
+      font-size:12px;
+      color:var(--muted);
+      opacity:.85;
+    }
+
+    /* Section */
+    .section{
+      padding:80px 0;
+      background:#050505;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .section__inner{
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:0 16px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+    }
+    .card{
+      border:1px solid rgba(255,255,255,.10);
+      padding:18px;
+      background:rgba(255,255,255,.02);
+    }
+    .card h3{ margin:0 0 8px; font-family:"Ubuntu","Exo",sans-serif; font-size:16px; }
+    .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.7; }
+
+    /* Footer */
+    footer{
+      padding:26px 0;
+      background:#000;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .footer__inner{
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:0 16px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.8;
+      display:flex;
+      gap:16px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .footer__links a{ opacity:.9; margin-right:12px; }
+    .footer__links a:hover{ opacity:1; }
+
+    /* Mobile Drawer */
+    .drawerBackdrop{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      z-index:1200;
+      display:none;
+    }
+    .drawer{
+      position:fixed;
+      top:0; right:0;
+      width:min(340px, 86vw);
+      height:100%;
+      background:#0a0a0a;
+      border-left:1px solid rgba(255,255,255,.10);
+      z-index:1300;
+      transform:translateX(100%);
+      transition:transform .2s ease;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .drawer.open{ transform:translateX(0); }
+    .drawerBackdrop.show{ display:block; }
+    .drawer a{
+      padding:12px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      font-family:"Ubuntu","Exo",sans-serif;
+      font-size:14px;
+      letter-spacing:.4px;
+    }
+    .drawerTop{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:6px;
+    }
+    .drawerTitle{ font-family:"Exo","Ubuntu",sans-serif; letter-spacing:1px; }
+    .closeBtn{
+      height:36px; width:44px;
+      border:1px solid rgba(255,255,255,.12);
+      background:transparent; color:var(--fg);
+      cursor:pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .header__inner{ grid-template-columns: auto 1fr auto; }
+      .nav{ display:none; }
+      .title{ font-size:34px; }
+      .section__inner{ grid-template-columns: 1fr; }
+      .actions .textBtn{ display:none; } /* 로그인/검색 텍스트 숨기고 싶으면 */
+    }
+	.site-footer small { color:#999; }
+
+.credit-toggle{
+  display:inline;
+  padding:0;
+  margin:0;
+  border:0;
+  background:none;
+  color:#999;
+  cursor:pointer;
+  font:inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.credit-toggle:hover{ color:#ccc; }
+
+.credit-toggle:focus-visible{
+  outline:2px solid #999;
+  outline-offset:3px;
+  border-radius:6px;
+}
+.iconBtn {
+  border: 0;
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.iconImg {
+  width: 24px;   /* 원하는 크기 */
+  height: 24px;
+  display: block;
+}
+
+/* 화면에는 안 보이게, 스크린리더용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+#openDrawer .iconImg{
+  transition: transform 260ms ease;
+  transform-origin: center;
+}
+
+#openDrawer:hover .iconImg{
+  transform: scale(1.7);
+}
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header" id="siteHeader">
+    <div class="header__inner">
+  <nav class="nav" aria-label="Primary">
+           <!-- <a href="about.html">ABOUT</a>
+      <a href="brand.html">BRAND</a>
+        <a href="https://www.instagram.com/v_exx_official/">INSTAGRAM</a>
+        <a href="shop.html">SHOP</a>
+        <a href="contact.html">CONTACT</a>
+      	 --></nav>
+
+
+      <a class="logo" href="index.html">
+        <!-- 로고 이미지 넣기 -->
+        <img src="assets/img/moaus_logoC.png" alt="logo"/>
+      </a>
+
+      <div class="actions">
+        <!-- <button class="iconBtn textBtn" type="button">Search</button> -->
+        <!-- <button class="iconBtn textBtn" type="button">Log In</button> -->
+        <!-- <button class="iconBtn" type="button">Cart</button> -->
+        <button class="iconBtn hamburger" id="openDrawer" type="button" aria-label="Open menu" style="font-size:20px; text-width=bold;"><img src="./assets/img/plus.png" alt="메뉴보기" class="iconImg" /></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="drawerBackdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="drawer" aria-label="Mobile menu">
+    <div class="drawerTop">
+      <div class="drawerTitle">MENU</div>
+ <button class="iconBtn hamburger" id="closeDrawer" type="button" aria-label="Open menu" style="font-size:20px; text-width=bold;"><img src="./assets/img/exit.png" alt="메뉴닫기" class="iconImg" /></button>
+    </div>
+    <a href="about.html">ABOUT</a>
+    <a href="https://www.instagram.com/v_exx_official/">INSTAGRAM</a>
+    <!-- <a href="#archive">ARCHIVE</a> -->
+    <a href="showcase.html">SHOWCASE</a>
+    <a href="contact.html">CONTACT</a>
+    <!-- <a href="#login">LOG IN</a> -->
+  </aside>
+
+  <!-- banner Section -->
+  <section class="hero">
+    <div class="swiper" id="heroSwiper">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/vexx_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">V-EXX</div>
+            <h1 class="title">브이엑스</h1>
+            <p class="sub">배너1</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/yongin_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">용인 FC</div>
+            <h1 class="title">용인용인용인용인</h1>
+            <p class="sub">배너2</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/jkj_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">안양 정관장 레드부스터스</div>
+            <h2 class="title">레드부레드부레드부</h2>
+            <p class="sub">배너3</p>
+          </div>
+        </div>
+
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/kbl_marvel_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">KBL X MARVEL</div>
+            <h2 class="title">마블마블마블</h2>
+            <p class="sub">배너4</p>
+          </div>
+		   </div>
+		  
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/kbo_marvel_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">KBO X 디즈니</div>
+            <h2 class="title">디즈니디즈니디즈니</h2>
+            <p class="sub">배너5</p>
+          </div>
+        </div>
+		  
+        <div class="swiper-slide slide">
+          <div class="slide__bg" style="background-image:url('assets/img/drbp_bgimg.png')"></div>
+          <div class="slide__overlay"></div>
+          <div class="slide__content">
+            <div class="kicker">Dr. B-Pang</div>
+            <h2 class="title">닥터비팡</h2>
+            <p class="sub">배너6</p>
+          </div>
+        </div>
+
+		  
+      </div>
+
+      <!-- Controls -->
+      <div class="swiper-button-prev" aria-label="Previous"></div>
+      <div class="swiper-button-next" aria-label="Next"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- <div class="hero__hint">Scroll</div> -->
+  </section>
+
+  <!-- Dummy Sections -->
+  <section class="section" id="about">
+    <div class="section__inner">
+      <div class="card">
+        <h3>ABOUT</h3>
+        <p>V-EXX는 대한민국을 대표하는 순수 스포츠 의류 전문 브랜드로, 스포츠웨어의 혁신적인 디자인과 기능성에 집중하여 전문적인 맞춤형 유니폼과 고품질 트레이닝복을 제공하는 기업입니다.</p>
+      </div>
+      <div class="card">
+        <h3>ORGANIZATION</h3>
+        <p></p>
+      </div>
+      <div class="card">
+        <h3>PARTNERS</h3>
+        <p>
+		<img src="assets/img/anayang_jkj_logo.png" alt="정관장레드부스터스" style="width:30%; hight:10%;" />
+		<img src="assets/img/fcanyang_logojpg.jpg" alt="FC안양" style="width:30%; hight:10%;" />
+		<img src="assets/img/jejuskfc_logo.png" alt="제주SKFC" style="width:30%; hight:10%;" />
+		<img src="assets/img/yonginfc_logo.jpg" alt="용인FC" style="width:30%; hight:10%;" />
+		</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer__inner">
+      <div>
+        <div>상호: (주)브이엑스 | 대표: 이정규 | 전화: 02-6212-7760 | 이메일: vexx.sport@gmail.com</div>
+        <div>주소: 서울특별시 중랑구 신내역로 111 (신내동) 신내SKV1center A동 908호 | 사업자등록번호: 881-87-03106 | 통신판매: 제 2024-서울중랑-1336 호</div>
+		<div>개인정보보호책임자 : 주식회사 브이엑스</div>
+      </div>
+      <div class="footer__links">
+        <a href="policy.html">이용약관</a>
+        <a href="privacy.html">개인정보처리방침</a>
+        <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=8818703106">사업자정보확인</a>
+      </div>
+	  <div style="display: flex; margin-left: auto;">
+	  © VEXX. All rights reserved. Developed by&nbsp;
+	  <button
+      type="button"
+      class="credit-toggle"
+      id="devCredit"
+      data-default="WOONIVERSE."
+      data-badge="Build v1.3.2 • Updated 2026-02-03"
+      aria-label="개발 정보 보기"
+	  style="text-decoration: none;"
+    >
+      WOONIVERSE.
+    </button>
+	  </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    // Header scroll effect
+    const header = document.getElementById('siteHeader');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+
+    // Swiper init
+    const heroSwiper = new Swiper('#heroSwiper', {
+      loop: true,
+      speed: 650,
+      autoplay: { delay: 3500, disableOnInteraction: false },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+    });
+
+    // Mobile drawer
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const openBtn = document.getElementById('openDrawer');
+    const closeBtn = document.getElementById('closeDrawer');
+
+    function openDrawer(){
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+	
+	  (function () {
+    const el = document.getElementById("devCredit");
+    if (!el) return;
+
+    const defaultText = el.dataset.default || el.textContent;
+    const badgeText = el.dataset.badge || "Build v1.0.0";
+
+    let timer = null;
+    let showingBadge = false;
+
+    function setText(next) {
+      el.textContent = next;
+    }
+
+    el.addEventListener("click", () => {
+      clearTimeout(timer);
+
+      showingBadge = !showingBadge;
+      setText(showingBadge ? badgeText : defaultText);
+
+      // 과하지 않게 자동 원복
+      if (showingBadge) {
+        timer = setTimeout(() => {
+          showingBadge = false;
+          setText(defaultText);
+        }, 1500);
+      }
+    });
+
+    // ESC로 원복 (키보드 사용자 배려)
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        clearTimeout(timer);
+        showingBadge = false;
+        setText(defaultText);
+        el.blur();
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
