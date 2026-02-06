@@ -229,6 +229,11 @@ html[data-theme="light"] .themeIcon--moon{ display:none; }
   font-family:"Ubuntu","Exo",sans-serif;
   font-size:14px;
   letter-spacing:.4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  min-height:44px;
 }
 
 /* Drawer(aside)에서 현재 페이지 링크 숨김 */
@@ -492,6 +497,7 @@ footer{
   #openDrawer .iconImg{ transition:none; transform:none; }
   .drawer{ transition:none; }
 }
+
 
 
 
