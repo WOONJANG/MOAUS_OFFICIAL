@@ -118,6 +118,22 @@ button{ font:inherit; }
 
 .actions{ display:flex; justify-content:flex-end; align-items:center; }
 
+.headerProgress{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:2px;
+  background: rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.headerProgress::before{
+  content:"";
+  display:block;
+  height:100%;
+  width: var(--scrollP, 0%);
+  background: rgba(255,255,255,.75);
+}
+
+
 /* Buttons */
 .iconBtn{
   cursor:pointer;
@@ -440,6 +456,7 @@ footer{
   #openDrawer .iconImg{ transition:none; transform:none; }
   .drawer{ transition:none; }
 }
+
 
 
 
