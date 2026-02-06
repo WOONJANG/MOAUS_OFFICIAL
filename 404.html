@@ -16,19 +16,24 @@
   <main class="card" role="status" aria-live="polite">
     <p class="kicker">MOAUS / V-EXX</p>
     <h1>404</h1>
-    <p class="sub">요청하신 페이지를 찾을 수 없습니다.</p>
+    <p class="sub">
+      요청하신 페이지를 찾을 수 없습니다.<br/>
+      <span class="count" id="countdown">3</span>초 후 홈으로 이동합니다.
+    </p>
 
-    <div class="path">
+    <div class="path" aria-label="requested path">
       <span>요청 경로</span>
       <code id="reqPath">/</code>
     </div>
 
     <div class="actions">
-      <a class="btn" id="homeLink" href="/">홈으로</a>
+      <a class="btn" id="homeLink" href="/">홈으로 즉시 이동</a>
       <a class="btn ghost" id="contactLink" href="/contact.html">CONTACT</a>
     </div>
 
-    <p class="hint">불편이 있으신분은 CONTACT를 눌러 문의해주세요.<br>3초 뒤에 자동으로 홈 화면으로 이동합니다.</p>
+    <p class="hint">
+      불편이 있으신분은 CONTACT를 눌러 문의해주세요.
+    </p>
   </main>
 </body>
 </html>
