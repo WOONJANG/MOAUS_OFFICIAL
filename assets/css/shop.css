@@ -1,15 +1,10 @@
-:root{
-  --panel: rgba(255,255,255,.06);
-  --panel2: rgba(255,255,255,.09);
+.wrap{
   --stroke: rgba(255,255,255,.12);
   --stroke2: rgba(255,255,255,.18);
-
   --text: rgba(255,255,255,.92);
   --muted2: rgba(255,255,255,.45);
-
   --shadow: 0 18px 50px rgba(0,0,0,.55);
   --radius: 22px;
-
   --accent: #C8A24A;
   --accentBg: rgba(200,162,74,.10);
   --accentStroke: rgba(200,162,74,.35);
@@ -241,3 +236,4 @@
   .card, .btn{ transition:none; }
   .card:hover, .card:focus-visible{ transform:none; }
 }
+
