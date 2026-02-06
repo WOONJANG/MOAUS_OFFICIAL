@@ -38,7 +38,7 @@ window.CLUBS = [
     store: "KBO X DISNEY",
     image: "./assets/img/kbo_disney_bgimg.png",
     logo: "./assets/img/kbo_disney_logo.png",
-    url: "moaus.shop",
+    url: "http://moaus.shop/",
     tags: [{ text: "MD", tone: "accent" }]
   },
   {
@@ -46,7 +46,7 @@ window.CLUBS = [
     store: "KBL X MARVEL",
     image: "./assets/img/kbl_marvel_bgimg.png",
     logo: "./assets/img/kbl_marvel_logo.png",
-    url: "moaus.shop",
+    url: "http://moaus.shop/",
     tags: [{ text: "MD", tone: "accent" }]
   },
   {
@@ -54,8 +54,9 @@ window.CLUBS = [
     store: "Dr.B-Pang",
     image: "./assets/img/drbp_bgimg.png",
     logo: "./assets/img/drbp_logo.png",
-    url: "moaus.shop",
+    url: "http://moaus.shop/",
     tags: [{ text: "MD", tone: "accent" }]
   }
 ];
+
 
