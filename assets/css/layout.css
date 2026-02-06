@@ -271,8 +271,14 @@ footer{
   border-radius:6px;
 }
 
+.drawer a{
+  background-image: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+}
+
+
 @media (prefers-reduced-motion: reduce){
   #openDrawer .iconImg{ transition:none; transform:none; }
   .drawer{ transition:none; }
 }
+
 
