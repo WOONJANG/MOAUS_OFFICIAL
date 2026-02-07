@@ -418,9 +418,107 @@
   }
 
   /* =========================================================
+     CURSOR EASTER EGG (V-EXX 11 clicks)
+     - includePartials() 이후에 DOM이 있어야 동작함
+     ========================================================= */
+  function initCursorEasterEgg(){
+    const trigger = document.getElementById("vexxTrigger");
+    const follower = document.getElementById("cursorFollower");
+    if(!trigger || !follower) return;
+
+    const REQUIRED_CLICKS = 11;
+    let clicks = 0;
+    let active = false;
+
+    // 마지막 포인터 위치를 저장해두면, 활성화 직후에도 바로 등장 가능
+    let lastX = window.innerWidth / 2;
+    let lastY = window.innerHeight / 2;
+
+    // 목표/현재 위치 (부드럽게 따라오기)
+    let targetX = -9999, targetY = -9999;
+    let curX = -9999, curY = -9999;
+
+    // 커서에서 살짝 떨어진 위치
+    const offsetX = 10;
+    const offsetY = 14;
+
+    // span을 클릭/키보드로도 쓸 수 있게 최소 세팅
+    trigger.style.cursor = "pointer";
+    trigger.setAttribute("role", "button");
+    trigger.tabIndex = 0;
+
+    function activate(){
+      active = true;
+
+      targetX = lastX + offsetX;
+      targetY = lastY + offsetY;
+      curX = targetX;
+      curY = targetY;
+
+      follower.style.opacity = "1";
+      follower.style.transform = `translate(${curX}px, ${curY}px)`;
+      requestAnimationFrame(tick);
+    }
+
+    function deactivate(){
+      active = false;
+      follower.style.opacity = "0";
+      follower.style.transform = "translate(-9999px, -9999px)";
+      clicks = 0;
+    }
+
+    function countClick(){
+      if(active) return; // 켜진 뒤에는 카운트 멈춤 (토글 원하면 여기 수정)
+      clicks += 1;
+      if(clicks >= REQUIRED_CLICKS) activate();
+    }
+
+    trigger.addEventListener("click", countClick);
+    trigger.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        countClick();
+      }
+      if(e.key === "Escape" && active){
+        deactivate();
+        trigger.blur();
+      }
+    });
+
+    // 포인터 위치는 항상 저장
+    window.addEventListener("pointermove", (e) => {
+      lastX = e.clientX;
+      lastY = e.clientY;
+
+      if(!active) return;
+      targetX = lastX + offsetX;
+      targetY = lastY + offsetY;
+    }, { passive: true });
+
+    function tick(){
+      if(!active) return;
+
+      // 스무딩(값 올리면 더 빨리 따라옴)
+      curX += (targetX - curX) * 0.22;
+      curY += (targetY - curY) * 0.22;
+
+      follower.style.transform = `translate(${curX}px, ${curY}px)`;
+      requestAnimationFrame(tick);
+    }
+
+    // 전역 ESC로도 끄기
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && active) deactivate();
+    });
+  }
+
+  /* =========================================================
      실행 순서
      ========================================================= */
   await includePartials();
+
+  // ✅ include로 footer가 들어온 뒤에 실행돼야 함
+  initCursorEasterEgg();
 
   ensureMainAndSkipLink();
 
@@ -438,70 +536,3 @@
   fixExternalBlankRel();
 
 })();
-
-
-
-(() => {
-  const trigger = document.getElementById("vexxTrigger");
-  const follower = document.getElementById("cursorFollower");
-  if (!trigger || !follower) return;
-
-  const REQUIRED_CLICKS = 11;
-
-  let clicks = 0;
-  let active = false;
-
-  // 커서 위치 (부드럽게 따라오게)
-  let targetX = -9999, targetY = -9999;
-  let curX = -9999, curY = -9999;
-
-  // 커서에서 살짝 떨어진 위치 (이미지가 커서를 가리지 않게)
-  const offsetX = 10;
-  const offsetY = 14;
-
-  function activate(){
-    active = true;
-    follower.style.opacity = "1";
-    requestAnimationFrame(tick);
-  }
-
-  // 원하면 토글로 꺼지게도 가능 (11번 다시 누르면 끔)
-  function deactivate(){
-    active = false;
-    follower.style.opacity = "0";
-    follower.style.transform = "translate(-9999px, -9999px)";
-    clicks = 0;
-  }
-
-  trigger.style.cursor = "pointer";
-
-  trigger.addEventListener("click", () => {
-    if (active) return; // 켜진 뒤에는 클릭 카운트 멈춤 (원하면 토글로 변경 가능)
-    clicks += 1;
-    if (clicks >= REQUIRED_CLICKS) activate();
-  });
-
-  // 마우스/펜/터치까지 포괄 (desktop에서도 pointermove가 잘 먹음)
-  window.addEventListener("pointermove", (e) => {
-    if (!active) return;
-    targetX = e.clientX + offsetX;
-    targetY = e.clientY + offsetY;
-  }, { passive: true });
-
-  function tick(){
-    if (!active) return;
-
-    // 스무딩(추적을 살짝 늦춰서 자연스럽게)
-    curX += (targetX - curX) * 0.22;
-    curY += (targetY - curY) * 0.22;
-
-    follower.style.transform = `translate(${curX}px, ${curY}px)`;
-    requestAnimationFrame(tick);
-  }
-
-  // ESC로 끄고 싶으면 이거 켜
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && active) deactivate();
-  });
-})();
-
