@@ -538,6 +538,22 @@ footer{
   outline-offset:3px;
   border-radius:6px;
 }
+/* Easter Egg*/
+#cursorFollower{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 26px;            /* 작지만 인식 가능 */
+  height: auto;
+  opacity: 0;             /* 기본 숨김 */
+  pointer-events: none;   /* 클릭 방해 금지 */
+  user-select: none;
+  z-index: 999999;
+  transform: translate(-9999px, -9999px);
+  will-change: transform, opacity;
+  transition: opacity .15s ease;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.35)); /* 어두운 배경에서도 보이게 */
+}
 
 /* responsive */
 @media (max-width: 920px){
@@ -557,3 +573,4 @@ footer{
   .drawer a{ transition:none; }
   .drawer a:hover{ transform:none; }
 }
+
