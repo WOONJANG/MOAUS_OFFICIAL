@@ -88,7 +88,7 @@
   align-items:center;
 }
 .partnerRow img{
-  width:30%;
+  width:10%;
   height:auto;
   display:block;
   opacity:.95;
@@ -100,6 +100,7 @@
   .section__inner{ grid-template-columns: 1fr; }
   .partnerRow img{ width:46%; }
 }
+
 
 
 
