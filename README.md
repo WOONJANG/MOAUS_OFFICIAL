@@ -7,7 +7,7 @@ Static website hosted on GitHub Pages.
 - `/about.html`
 - `/contact.html`
 - `/showcase.html`
-- `/partials/` shared header/aside/footer
+- `/partials/` shared header/aside/partners/footer
 - `/assets/` css/js/img
 - `/.well-known/`
 
