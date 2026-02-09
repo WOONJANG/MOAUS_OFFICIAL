@@ -13,6 +13,10 @@
   gap: 44px;
 }
 
+#history .sectionTitle{
+  text-align:center;             
+}
+
 #history .historyRow{
   /* 튜닝 변수 */
   --logoH: 72px;
