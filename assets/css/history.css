@@ -1,0 +1,171 @@
+/* =========================
+   HISTORY TIMELINE
+   ========================= */
+
+.historyTimeline{
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.historyRow{
+  /* 튜닝 변수 */
+  --logoH: 72px;
+  --dotSize: 18px;
+  --gapLogoDot: 12px;
+  --gapDotText: 14px;
+
+  /* 사이트 변수와 연동 (없으면 fallback) */
+  --bgColor: var(--bg, #fff);
+  --cardText: var(--text, #111);
+  --mutedText: var(--textMuted, rgba(0,0,0,.62));
+  --lineColor: var(--lineSoft, rgba(0,0,0,.22));
+
+  /* 라인/점 컬러 */
+  --dotColor: #8b1c1c;
+
+  position: relative;
+  list-style: none;
+  padding: 0 6px;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(12px, 2vw, 26px);
+}
+
+/* 가로 라인 */
+.historyRow::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--logoH) + var(--gapLogoDot) + (var(--dotSize) / 2));
+  height: 2px;
+  background: var(--lineColor);
+  border-radius: 2px;
+}
+
+/* 행별 색 */
+.historyRow--red{  --dotColor:#8b1c1c; }
+.historyRow--blue{ --dotColor:#2f5fa8; }
+.historyRow--navy{ --dotColor:#2a2f4a; }
+
+.historyItem{
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--cardText);
+}
+
+.historyLogoWrap{
+  height: var(--logoH);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.historyLogo{
+  max-height: var(--logoH);
+  max-width: 130px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.historyDot{
+  width: var(--dotSize);
+  height: var(--dotSize);
+  border-radius: 999px;
+  background: var(--dotColor);
+  margin-top: var(--gapLogoDot);
+  position: relative;
+  z-index: 2;
+
+  /* 라인 위에 점이 선명하게 보이도록 배경 링 */
+  box-shadow: 0 0 0 6px var(--bgColor);
+}
+
+.historyText{
+  margin-top: var(--gapDotText);
+  display: grid;
+  gap: 6px;
+}
+
+.historyPeriod{
+  font-weight: 900;
+  letter-spacing: .2px;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.historyTitle{
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.historyMeta{
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--mutedText);
+  font-weight: 650;
+}
+
+/* =========================
+   MOBILE: 세로 타임라인 전환
+   ========================= */
+@media (max-width: 860px){
+  .historyTimeline{ gap: 28px; }
+
+  .historyRow{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0;
+  }
+
+  /* 세로 라인 */
+  .historyRow::before{
+    left: 11px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+  }
+
+  .historyItem{
+    display: grid;
+    grid-template-columns: 22px 88px 1fr;
+    gap: 12px;
+    align-items: start;
+    text-align: left;
+  }
+
+  .historyDot{
+    margin-top: 12px;
+    justify-self: center;
+    box-shadow: 0 0 0 5px var(--bgColor);
+  }
+
+  .historyLogoWrap{
+    height: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 2px;
+  }
+
+  .historyLogo{
+    max-width: 88px;
+    max-height: 42px;
+  }
+
+  .historyText{ margin-top: 0; }
+  .historyPeriod{ font-size: 16px; }
+  .historyTitle{ font-size: 15px; }
+  .historyMeta{ font-size: 13px; }
+}
